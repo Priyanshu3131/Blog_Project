@@ -1,1 +1,0 @@
-export const DB_NAME = "Blog" // name of our application's database

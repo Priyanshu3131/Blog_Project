@@ -47,8 +47,19 @@ export const getPosts = asyncHandler(async (req, res) => {
 });
 
 // READ ONE
+// export const getPostById = asyncHandler(async (req, res) => {
+//   const post = await Post.findById(req.params.id);
+
+//   if (!post) {
+//     throw new ApiError(404, "Post not found");
+//   }
+
+//   return res
+//     .status(200)
+//     .json(new ApiResponse(200, post, "Post retrieved successfully"));
+// });
 export const getPostById = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.query.id); // ✅ changed from req.params.id
 
   if (!post) {
     throw new ApiError(404, "Post not found");
@@ -61,7 +72,8 @@ export const getPostById = asyncHandler(async (req, res) => {
 
 // UPDATE
 export const updatePost = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  // const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.query.id);
 
   if (!post) {
     throw new ApiError(404, "Post not found");
@@ -90,7 +102,8 @@ export const updatePost = asyncHandler(async (req, res) => {
 
 // DELETE
 export const deletePost = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  // const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.query.id);
 
   if (!post) {
     throw new ApiError(404, "Post not found");

@@ -3,7 +3,8 @@ import {Link, useNavigate} from 'react-router-dom'
 import { login as authLogin } from '../store/authSlice'
 import {Button, Input, Logo} from "./index"
 import {useDispatch} from "react-redux"  // To update Redux state
-import authService from "../appwrite/auth"
+// import authService from "../appwrite/auth"
+import { loginUser, getCurrentUser } from "../services/auth";
 import {useForm} from "react-hook-form" // Manages form state & validation
 
 function Login() {
@@ -15,14 +16,15 @@ function Login() {
     const login = async(data) => { //The data comes from React Hook Form when the form is submitted.
         setError("")
         try {
-            const session = await authService.login(data)
+            const session = await loginUser(data)
             if (session) {
-                const userData = await authService.getCurrentUser()
+                const userData = await getCurrentUser()
                 if(userData) dispatch(authLogin(userData)); // Store user data in Redux
                 navigate("/")
             }
         } catch (error) {
             setError(error.message)
+            // setError(error?.response?.data?.message || "Login failed");
         }
     }
 

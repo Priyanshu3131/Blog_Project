@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
-import authService from '../appwrite/auth'
+// import authService from '../appwrite/auth'
+import { registerUser, getCurrentUser,loginUser } from '../services/auth'
+
 import {Link ,useNavigate} from 'react-router-dom'
 import {login} from '../store/authSlice'
 import {Button, Input, Logo} from './index.js'
@@ -12,19 +14,53 @@ function Signup() {
     const dispatch = useDispatch()
     const {register, handleSubmit} = useForm()
 
+    // const create = async(data) => {
+    //     setError("")   
+    //     try {
+    //         // const userData = await authService.createAccount(data)
+    //         // if (userData) {
+    //         //     const userData = await authService.getCurrentUser()
+    //         //     if(userData) dispatch(login(userData));
+    //         //     navigate("/")
+    //         // }
+    //         const result = await registerUser(data); // backend POST /users/register
+    //         if (result?.success) {
+    //             const userData = await getCurrentUser(); // backend GET /users/me
+    //             if (userData) {
+    //                 dispatch(login(userData));
+    //                 navigate("/");
+    //             }
+    //         }
+        
+    //     } catch (error) {
+    //         setError(error.message)
+    //     }
+    // }
     const create = async(data) => {
-        setError("")   
-        try {
-            const userData = await authService.createAccount(data)
+    setError("")   
+    try {
+        // Step 1: Register the user
+        const result = await registerUser(data);
+        
+        if (result?.success) {
+            // Step 2: Login the user (this sets the token/cookie)
+            const loginData = {
+                email: data.email,
+                password: data.password
+            };
+            await loginUser(loginData);
+            
+            // Step 3: Now get current user (this will work because user is logged in)
+            const userData = await getCurrentUser();
             if (userData) {
-                const userData = await authService.getCurrentUser()
-                if(userData) dispatch(login(userData));
-                navigate("/")
+                dispatch(login(userData));
+                navigate("/");
             }
-        } catch (error) {
-            setError(error.message)
         }
+    } catch (error) {
+        setError(error.message)
     }
+}
 
   return (
     <div className="flex items-center justify-center">
@@ -49,12 +85,20 @@ function Signup() {
                 <form onSubmit={handleSubmit(create)}>
                     <div className='space-y-5'>
                         <Input
+                            label="Username: "
+                            placeholder="Choose a unique username"
+                            {...register("username", {
+                                required: true,
+                            })}
+                        />
+                        <Input 
                         label="Full Name: "
                         placeholder="Enter your full name"
-                        {...register("name", {
+                        {...register("fullName", {
                             required: true,  //Ensures the field is not empty
                         })}
                         />
+                        
                         <Input
                         label="Email: "
                         placeholder="Enter your email"

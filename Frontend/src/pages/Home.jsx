@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import appwriteService from "../appwrite/config";
+//import appwriteService from "../appwrite/config";
+import { getPosts } from "../services/post";
 import {Container, PostCard} from '../components'
 
 function Home() {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
-        appwriteService.getPosts().then((posts) => {
+        getPosts().then((posts) => {
             if (posts) {
-                setPosts(posts.documents)
+                // setPosts(posts.documents)\
+                setPosts(posts)
             }
         })
     }, [])
@@ -33,7 +35,7 @@ function Home() {
             <Container>
                 <div className='flex flex-wrap'>
                     {posts.map((post) => (
-                        <div key={post.$id} className='p-2 w-1/4'>
+                        <div key={post._id} className='p-2 w-1/4'>
                             <PostCard {...post} />
                         </div>
                     ))}

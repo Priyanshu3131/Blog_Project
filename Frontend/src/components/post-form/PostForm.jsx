@@ -1,7 +1,8 @@
 import React, { useCallback } from "react"; //useCallback → Memoizes the slug transformation function
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "..";
-import appwriteService from "../../appwrite/config";
+//import appwriteService from "../../appwrite/config";
+import { createPost, updatePost } from "../../services/post";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"; //Fetches authentication data from Redux
 
@@ -9,7 +10,7 @@ export default function PostForm({ post }) { // post prop contains existing post
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({ //useForm initializes the form with default values (if editing an existing post)
         defaultValues: {
             title: post?.title || "",
-            slug: post?.$id || "",
+            slug: post?._id || "",
             content: post?.content || "",
             status: post?.status || "active",
         },
@@ -18,35 +19,68 @@ export default function PostForm({ post }) { // post prop contains existing post
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
 
+    // const submit = async (data) => {
+    //     if (post && post._id) { // updating image
+    //         const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
+
+    //         if (file) {
+    //             appwriteService.deleteFile(post.featuredImage);  //// Delete old image
+    //         }
+
+    //         const dbPost = await appwriteService.updatePost(post.$id, { // update
+    //             ...data,
+    //             featuredImage: file ? file.$id : undefined,
+    //         });
+
+    //         if (dbPost) {
+    //             navigate(`/post/${dbPost.$id}`);  // Redirect to updated post
+    //         }
+    //     } else { // Creating a new post
+    //         const file = await appwriteService.uploadFile(data.image[0]);
+
+    //         if (file) {
+    //             const fileId = file.$id;
+    //             data.featuredImage = fileId;
+    //             const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });
+
+    //             if (dbPost) {
+    //                 navigate(`/post/${dbPost.$id}`); // Redirect to new post
+    //             }
+    //         }
+    //     }
+    // };
+
     const submit = async (data) => {
-        if (post && post.$id) { // updating image
-            const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
-
-            if (file) {
-                appwriteService.deleteFile(post.featuredImage);  //// Delete old image
-            }
-
-            const dbPost = await appwriteService.updatePost(post.$id, { // update
-                ...data,
-                featuredImage: file ? file.$id : undefined,
-            });
-
-            if (dbPost) {
-                navigate(`/post/${dbPost.$id}`);  // Redirect to updated post
-            }
-        } else { // Creating a new post
-            const file = await appwriteService.uploadFile(data.image[0]);
-
-            if (file) {
-                const fileId = file.$id;
-                data.featuredImage = fileId;
-                const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });
-
-                if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`); // Redirect to new post
-                }
-            }
+        if (!userData || !userData._id) {
+            return <p className="text-red-500">You must be logged in to create or edit a post.</p>;
         }
+        const formData = new FormData();
+        formData.append("title", data.title);
+        formData.append("content", data.content);
+
+        if (data.image && data.image[0]) {
+        formData.append("image", data.image[0]);
+        }
+
+        if (post && post._id) {
+        // UPDATE
+        try {
+            // const updated = await updatePost(post._id, formData);
+            const updated = await updatePost(formData, post._id);
+            navigate(`/post/${updated.data._id}`);
+        } catch (err) {
+            console.error("Update error:", err);
+        }
+        } else {
+        // CREATE
+        formData.append("userId", userData._id);
+        try {
+            const created = await createPost(formData);
+            navigate(`/post/${created.data._id}`);
+        } catch (err) {
+            console.error("Create error:", err);
+        }
+    }
     };
 
     const slugTransform = useCallback((value) => { 
@@ -109,7 +143,7 @@ export default function PostForm({ post }) { // post prop contains existing post
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 />
-                {post && (
+                {/* {post && (
                     <div className="w-full mb-4">
                         <img
                             src={appwriteService.getFilePreview(post.featuredImage)}
@@ -117,7 +151,16 @@ export default function PostForm({ post }) { // post prop contains existing post
                             className="rounded-lg"
                         />
                     </div>
-                )}
+                )} */}
+                {post?.imageUrl && (
+                    <div className="w-full mb-4">
+                        <img
+                        src={post.imageUrl}
+                        alt={post.title}
+                        className="rounded-lg"
+                        />
+                    </div>
+                    )}
                 <Select
                     options={["active", "inactive"]}
                     label="Status"

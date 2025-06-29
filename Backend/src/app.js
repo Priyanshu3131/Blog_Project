@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser"
 const app = express()
 //app.use(cors)
 app.use(cors({ // corsOption-cors settings(optional)
-    origin:"http://localhost:5173",
+    origin:["http://localhost:5173","https://blog-project-nu-nine.vercel.app"],
     credentials: true,
 }))
 

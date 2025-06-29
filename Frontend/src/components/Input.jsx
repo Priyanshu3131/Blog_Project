@@ -10,7 +10,7 @@ const Input = React.forwardRef( function Input({ //React.forwardRef() → Allows
     return (
         <div className='w-full'>
             {label && <label 
-            className='inline-block mb-1 pl-1' 
+            className='inline-block mb-1 pl-1 text-sm font-medium text-gray-700 dark:text-gray-300'
             htmlFor={id}> 
             {/* Connects label to input for accessibility. */}
                 {label}
@@ -18,7 +18,7 @@ const Input = React.forwardRef( function Input({ //React.forwardRef() → Allows
             }
             <input
             type={type}
-            className={`px-3 py-2 rounded-lg bg-white text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`} // back tick is used for classname to convert to js
+            className={`px-3 py-2 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white outline-none focus:bg-gray-50 dark:focus:bg-gray-700 duration-200 border border-gray-300 dark:border-gray-600 w-full ${className}`} // backtick is used to convert to js
             ref={ref}  // Allows access via ref from a parent.
             {...props}
             id={id}   // Ensures correct association with the label.

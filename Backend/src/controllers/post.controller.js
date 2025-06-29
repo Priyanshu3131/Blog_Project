@@ -46,6 +46,14 @@ export const getPosts = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, posts, "Posts fetched successfully"));
 });
 
+// R*************************************EAD USER'S POSTS ONLY (NEW ADDITION) ********************************************
+export const getUserPosts = asyncHandler(async (req, res) => {
+  const posts = await Post.find({ userId: req.user._id }).sort({ createdAt: -1 });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, posts, "User posts fetched successfully"));
+});
+
 // READ ONE
 // export const getPostById = asyncHandler(async (req, res) => {
 //   const post = await Post.findById(req.params.id);

@@ -27,12 +27,22 @@ function App() {
     .finally(() => setLoading(false))
   }, [])
 
+  // return !loading ? (
+  //   <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+  //     <Header />
+  //     <main className="flex-grow w-full px-4 py-6">
+  //       <Outlet />
+  //     </main>
+  //     <Footer />
+  //   </div>
+  // ) : null;
+
   return !loading ? (
-    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+    <div className='min-h-screen flex flex-wrap content-between bg-white dark:bg-gray-950'>
       <div className='w-full block'>
         <Header />
         <main>
-        TODO:  <Outlet />
+        <Outlet />
         </main>
         <Footer />
       </div>

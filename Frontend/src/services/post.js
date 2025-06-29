@@ -25,6 +25,15 @@ export const getPosts = async () => {
   // Default fallback
   return [];
 };
+//**************************************************************************************************** */
+export const getUserPosts = async () => {
+  const res = await axios.get("/posts/getUserPosts"); // You'll need this backend endpoint
+  
+  // Same response handling as getPosts
+  if (Array.isArray(res.data?.data)) return res.data.data;
+  if (Array.isArray(res.data)) return res.data;
+  return [];
+};
 
 // Fetch post by ID
 export const getPostById = async (id) => {

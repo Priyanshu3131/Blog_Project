@@ -9,11 +9,15 @@ import {
   getPostById,
   updatePost,
   deletePost,
+  getUserPosts,
 } from "../controllers/post.controller.js";
 
 const router = express.Router();
 
 router.get("/getPosts", getPosts);
+
+router.get("/getUserPosts", verifyJWT, getUserPosts); // Add this new route
+
 router.get("/getPost", getPostById);
 
 // Upload single image file called 'image' before controller

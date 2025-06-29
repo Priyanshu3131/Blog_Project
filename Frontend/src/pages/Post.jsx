@@ -83,9 +83,9 @@ export default function Post() {
                     )}
                 </div>
                 <div className="w-full mb-6">
-                    <h1 className="text-2xl font-bold">{post.title}</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white ">{post.title}</h1>
                 </div>
-                <div className="browser-css">
+                <div className="text-gray-800 dark:text-gray-200 text-base leading-relaxed space-y-4">
                     {/* {parse(post.content)} */}
                     {parse(post.content || "")}
                     </div>

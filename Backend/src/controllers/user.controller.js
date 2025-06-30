@@ -152,10 +152,13 @@ const loginUser = asyncHandler(async (req, res) =>{
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
+
     const options = { // cookies can only be modified by server(not fronted)
         httpOnly: true,
-        secure: false,
-        sameSite: "lax", // <-- ADD THIS
+        // secure: false,
+        // sameSite: "lax", // <-- ADD THIS
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
     }
 
     return res
@@ -194,8 +197,10 @@ const logoutUser = asyncHandler(async(req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax", // <-- ADD THIS
+        // secure: false,
+        // sameSite: "lax", // <-- ADD THIS
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
     }
 
     return res
@@ -229,13 +234,14 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     
         if (incomingRefreshToken !== user?.refreshToken) {
             throw new ApiError(401, "Refresh token is expired or used")
-            
         }
     
         const options = {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax", // <-- ADD THIS
+            // secure: false,
+            // sameSite: "lax", // <-- ADD THIS
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
         }
     
         const {accessToken, newRefreshToken} = await generateAccessAndRefereshTokens(user._id)

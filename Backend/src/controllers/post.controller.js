@@ -39,16 +39,28 @@ export const createPost = asyncHandler(async (req, res) => {
 });
 
 // READ ALL
+// export const getPosts = asyncHandler(async (req, res) => {
+//   const posts = await Post.find().sort({ createdAt: -1 });
+//   return res
+//     .status(200)
+//     .json(new ApiResponse(200, posts, "Posts fetched successfully"));
+// });
 export const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find().sort({ createdAt: -1 });
+  const posts = await Post.find()
+    .sort({ createdAt: -1 })
+    .populate('userId', 'username'); // 👈 populate username only
+
   return res
     .status(200)
     .json(new ApiResponse(200, posts, "Posts fetched successfully"));
 });
 
-// R*************************************EAD USER'S POSTS ONLY (NEW ADDITION) ********************************************
+// *************************************READ USER'S POSTS ONLY (NEW ADDITION) ********************************************
 export const getUserPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({ userId: req.user._id }).sort({ createdAt: -1 });
+  //const posts = await Post.find({ userId: req.user._id }).sort({ createdAt: -1 });
+  const posts = await Post.find({ userId: req.user._id })
+  .sort({ createdAt: -1 })
+  .populate('userId', 'username');
   return res
     .status(200)
     .json(new ApiResponse(200, posts, "User posts fetched successfully"));

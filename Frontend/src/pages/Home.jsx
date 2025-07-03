@@ -76,7 +76,7 @@ function Home() {
             <Container fullWidth={true}>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4'>
                     {posts.map((post) => (
-                        <PostCard key={post._id} {...post} />
+                        <PostCard key={post._id} {...post} username={post.userId?.username}/>
                     ))}
                 </div>
             </Container>

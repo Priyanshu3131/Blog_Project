@@ -2,9 +2,15 @@
 import { useEffect, useState } from "react";
 
 const DarkModeToggle = () => {
-  const [darkMode, setDarkMode] = useState(() =>
-    localStorage.getItem("theme") === "dark"
-  );
+  // const [darkMode, setDarkMode] = useState(() =>
+  //   localStorage.getItem("theme") === "dark"
+  // );
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) return savedTheme === "dark";
+    // If not saved, check system preference
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
 
   useEffect(() => {
     const root = window.document.documentElement;

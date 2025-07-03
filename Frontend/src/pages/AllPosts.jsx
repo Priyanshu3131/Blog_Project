@@ -88,12 +88,12 @@ function AllPosts() {
                     {posts.length > 0 ? (
                         posts.map((post) => (
                             <div key={post._id} className='p-2 w-1/4 '>
-                                <PostCard {...post} />
+                                <PostCard {...post} username={post.userId?.username} hideAuthor/>
                             </div>
                         ))
                     ) : (
                         <div className='w-full text-center py-8'>
-                            <p className='text-gray-600'>You haven't created any posts yet.</p>
+                            <p className='text-gray-600  dark:text-gray-400'>You haven't created any posts yet.</p>
                         </div>
                     )}
                 </div>

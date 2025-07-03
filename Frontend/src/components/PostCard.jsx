@@ -24,9 +24,9 @@ function PostCard({_id, title, imageUrl, username,hideAuthor = false}) {
                     
                     {/* Author */}
                     {!hideAuthor && username && (
-                      <p className="text-sm mt-2 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
-                        👤 @{username}
-                      </p>
+                      <p className="text-sm mt-2 font-semibold px-2 py-1 rounded-full inline-block w-fit transition-colors duration-200">
+    👤 @{username}
+  </p>
                     )}
                 </div>
             </div>

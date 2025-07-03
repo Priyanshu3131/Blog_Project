@@ -56,6 +56,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+:root {
+  color-scheme: dark;
+}
+:root.light {
+  color-scheme: light;
+}
 
 html, body {
   margin: 0;

@@ -176,7 +176,7 @@ function AllPosts() {
           ) : (
             <div className="w-full text-center py-8">
               <p className="text-gray-600 dark:text-gray-400">
-                No matching posts found.
+                Oops! No matching posts found.
               </p>
             </div>
           )}

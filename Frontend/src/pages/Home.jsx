@@ -131,7 +131,7 @@ function Home() {
                     <input
                         type="text"
                         placeholder="Search posts by title or author..."
-                        className="w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-3 border rounded-md bg-gray-800 dark:bg-gray-800 dark:border-gray-600 dark:text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />

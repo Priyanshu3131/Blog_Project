@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser"
 const app = express()
 //app.use(cors)
 app.use(cors({ // corsOption-cors settings(optional)
-    origin:["http://localhost:5173","https://blog-project-nu-nine.vercel.app"],
+    origin:["http://localhost:5173", "https://blog-project-nu-nine.vercel.app"],
     credentials: true,
 }))
 
@@ -23,4 +23,8 @@ import postRouter from './routes/post.routes.js'
 app.use("/api/v1/users", userRouter) // activate router through middleware as it's in separate file
 // /api/v1 is standard practise 
 app.use("/api/v1/posts", postRouter)
+ 
+app.get("/api/health", (req, res) => { // to keep the backend live
+  res.status(200).json({ status: "ok" });
+});
 export { app }

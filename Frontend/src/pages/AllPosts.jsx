@@ -165,11 +165,12 @@ function AllPosts() {
           />
         </div>
 
-        {/* 🧱 Post Cards */}
+        {/* Post Cards */}
         <div className="flex flex-wrap">
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post) => (
-              <div key={post._id} className="p-2 w-1/4">
+              // <div key={post._id} className="p-2 w-1/4">
+              <div key={post._id} className="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
                 <PostCard {...post} />
               </div>
             ))

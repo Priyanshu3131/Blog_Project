@@ -139,3 +139,31 @@ export const deletePost = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, null, "Post deleted successfully"));
 });
+
+// LIKE / UNLIKE
+export const toggleLikePost = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user._id;
+
+  const post = await Post.findById(postId);
+  if (!post) {
+    throw new ApiError(404, "Post not found");
+  }
+
+  const index = post.likes.findIndex(
+    (id) => id.toString() === userId.toString()
+  );
+
+  if (index === -1) {
+    post.likes.push(userId); // like
+  } else {
+    post.likes.splice(index, 1); // unlike
+  }
+
+  await post.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, post, "Post like status updated"));
+});
+

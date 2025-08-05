@@ -67,3 +67,10 @@ export const deletePost = async (id) => {
   const res = await axios.delete(`/posts/deletePost?id=${id}`);
   return res.data;
 };
+
+export const toggleLike = async (postId) => {
+  const res = await axios.post(`/posts/like/${postId}`, null, {
+    withCredentials: true,
+  });
+  return res.data?.data;
+};

@@ -6,6 +6,8 @@ import { getCurrentUser } from "./services/auth"
 import {login, logout} from "./store/authSlice"
 import { Footer, Header } from './components'
 import { Outlet } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   //console.log(process.env.REACT_APP_APPWRITE_URL)
@@ -20,6 +22,7 @@ function App() {
     .then((userData) => {
       if (userData) { 
         dispatch(login({userData}))
+        //dispatch(login(userData))  // Fixed: Pass userData directly, not wrapped in object
       } else {
         dispatch(logout())
       }
@@ -46,6 +49,19 @@ function App() {
         </main>
         <Footer />
       </div>
+      {/* Toast Container */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   ) : null
 }

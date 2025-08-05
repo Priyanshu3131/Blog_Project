@@ -23,7 +23,7 @@ const generateAccessAndRefereshTokens = async(userId) =>{
     }
 }
 const registerUser = asyncHandler( async (req, res) => {
-    try {
+    //try {
         // res.status(200).json({
         //     message:"hello"
         // });
@@ -104,13 +104,13 @@ const registerUser = asyncHandler( async (req, res) => {
         return res.status(201).json(
             new ApiResponse(200, createdUser, "User registered Successfully")
         )
-    } catch (error) {
-        console.error("🔥 Error during user registration:", error);
-        return res.status(500).json({
-            message: "Internal Server Error",
-            error: error?.message
-        });
-    }
+    // } catch (error) {
+    //     console.error("🔥 Error during user registration:", error);
+    //     return res.status(500).json({
+    //         message: "Internal Server Error",
+    //         error: error?.message
+    //     });
+    // }
 } );
 
 const loginUser = asyncHandler(async (req, res) =>{
@@ -125,7 +125,7 @@ const loginUser = asyncHandler(async (req, res) =>{
     console.log(email);
 
     if (!username && !email) {
-        throw new ApiError(400, "username or email is required")
+        throw new ApiError(400, "Email is required")
     }
     
     // Here is an alternative of above code based on logic discussed in video:

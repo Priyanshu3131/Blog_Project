@@ -10,6 +10,7 @@ import {
   updatePost,
   deletePost,
   getUserPosts,
+  toggleLikePost,
 } from "../controllers/post.controller.js";
 
 const router = express.Router();
@@ -24,5 +25,9 @@ router.get("/getPost", getPostById);
 router.post("/createPost", verifyJWT, upload.single("image"), createPost);
 router.put("/updatePost", verifyJWT, upload.single("image") ,updatePost); // also image may be updated
 router.delete("/deletePost",  verifyJWT,deletePost );
+
+// router.put("/like", verifyJWT, toggleLikePost);
+
+router.post("/like/:postId", verifyJWT, toggleLikePost); 
 
 export default router;

@@ -5,7 +5,8 @@ import {Button, Input, Logo} from "./index"
 import {useDispatch} from "react-redux"  // To update Redux state
 // import authService from "../appwrite/auth"
 import { loginUser, getCurrentUser } from "../services/auth";
-import {useForm} from "react-hook-form" // Manages form state & validation
+import {useForm} from "react-hook-form" // Manages form state & validation'
+import { toast } from 'react-toastify'
 
 function Login() {
     const navigate = useNavigate()
@@ -14,18 +15,38 @@ function Login() {
     const [error, setError] = useState("")
 
     const login = async(data) => { //The data comes from React Hook Form when the form is submitted.
-        setError("")
+        //setError("")
         try {
             const session = await loginUser(data)
             if (session) {
                 const userData = await getCurrentUser()
-                if(userData) dispatch(authLogin(userData)); // Store user data in Redux
-                navigate("/")
+                // if(userData) dispatch(authLogin(userData)); // Store user data in Redux
+                // navigate("/")
+                if(userData) {
+                    // ✅ Fixed: Pass userData directly, not wrapped in object(***********************************************************************************************)
+                    dispatch(authLogin({userData})); 
+                    navigate("/")
+                }
             }
-        } catch (error) {
-            setError(error.message)
-            // setError(error?.response?.data?.message || "Login failed");
-        }
+        // } catch (error) {
+        //     //setError(error.message)
+        //     const message = error?.response?.data?.message || error?.message || "Login failed"
+        //     toast.error(message)
+        // }
+          } catch (error) {
+              let message = "Login failed. Please try again."
+
+              if (error?.response?.status === 401) {
+                // Customize based on your backend logic if possible
+                message = "Invalid email or password"
+              } else if (error?.response?.status === 404) {
+                message = "User not found"
+              } else if (error?.response?.status === 400) {
+                message = error?.response?.data?.message || "Bad Request"
+              }
+              toast.error(message)
+          }
+
     }
 
     return (

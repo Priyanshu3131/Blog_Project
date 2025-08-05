@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 // import authService from '../appwrite/auth'
 import { registerUser, getCurrentUser,loginUser } from '../services/auth'
+import { toast } from 'react-toastify'
 
 import {Link ,useNavigate} from 'react-router-dom'
 import {login} from '../store/authSlice'
@@ -26,12 +27,33 @@ function Signup() {
           await loginUser({ email: data.email, password: data.password });
           const userData = await getCurrentUser();
           if (userData) {
-            dispatch(login(userData));
+            dispatch(login({userData})); // wrap it here as well to fix the refresh issue
+            toast.success("Account created successfully!")
             navigate("/");
           }
         }
       } catch (error) {
-        setError(error.message)
+          let message = "Registration failed";
+
+          if (error?.response) {
+            const status = error.response.status;
+            const serverMessage = error.response.data?.message;
+
+            if (status === 409) {
+              message = serverMessage || "User with email or username already exists";
+            } else if (status === 400) {
+              message = serverMessage || "Invalid data provided";
+            } else if (status >= 500) {
+              message = "Server error. Please try again later.";
+            } else {
+              message = serverMessage || "Something went wrong. Please try again.";
+            }
+          } else {
+            message = error.message || "Network error. Please check your connection.";
+          }
+
+          toast.error(message);
+
       } finally {
         setLoading(false)
       }

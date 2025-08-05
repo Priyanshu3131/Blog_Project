@@ -11,7 +11,8 @@ const authSlice = createSlice({
     reducers: {
         login: (state, action) => {
             state.status = true;
-            state.userData = action.payload.userData;
+            //state.userData = action.payload.userData;
+            state.userData = action.payload?.userData || action.payload; // you could have done this way to accept raw userData (wrapped or unwrapped )
         },
         logout: (state) => {
             state.status = false;
